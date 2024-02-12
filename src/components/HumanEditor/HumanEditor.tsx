@@ -3,51 +3,35 @@ import Konva from "konva";
 import { Circle, Layer, Line, Stage } from "react-konva";
 
 import { HumanEditorProps } from "./HumanEditor.props";
+import { toNumber } from "../../utils/toNumber";
 
 const HumanEditor = ({ width, height }: HumanEditorProps) => {
-  const offsetX = useRef<number>(0);
-  const offsetY = useRef<number>(0);
-
   const [point11, setPoint11] = useState<number[]>([100, 100]);
   const [point21, setPoint21] = useState<number[]>([200, 100]);
 
   const [point12, setPoint12] = useState<number[]>([100, 200]);
   const [point22, setPoint22] = useState<number[]>([200, 200]);
 
-  const handleDragStart11 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    offsetX.current = point11[0] - evt.evt.offsetX;
-    offsetY.current = point11[1] - evt.evt.offsetY;
+  const circle1Ref = useRef<Konva.Circle>(null);
+  const circle2Ref = useRef<Konva.Circle>(null);
+
+  const circle3Ref = useRef<Konva.Circle>(null);
+  const circle4Ref = useRef<Konva.Circle>(null);
+
+  const handleDragEvent11 = () => {
+    setPoint11([toNumber(circle1Ref.current?.x()), toNumber(circle1Ref.current?.y())]);
   };
 
-  const handleDragStart21 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    offsetX.current = point21[0] - evt.evt.offsetX;
-    offsetY.current = point21[1] - evt.evt.offsetY;
+  const handleDragEvent21 = () => {
+    setPoint21([toNumber(circle2Ref.current?.x()), toNumber(circle2Ref.current?.y())]);
   };
 
-  const handleDragStart12 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    offsetX.current = point12[0] - evt.evt.offsetX;
-    offsetY.current = point12[1] - evt.evt.offsetY;
+  const handleDragEvent12 = () => {
+    setPoint12([toNumber(circle3Ref.current?.x()), toNumber(circle3Ref.current?.y())]);
   };
 
-  const handleDragStart22 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    offsetX.current = point22[0] - evt.evt.offsetX;
-    offsetY.current = point22[1] - evt.evt.offsetY;
-  };
-
-  const handleDragEvent11 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    setPoint11([evt.evt.offsetX + offsetX.current, evt.evt.offsetY + offsetY.current]);
-  };
-
-  const handleDragEvent21 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    setPoint21([evt.evt.offsetX + offsetX.current, evt.evt.offsetY + offsetY.current]);
-  };
-
-  const handleDragEvent12 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    setPoint12([evt.evt.offsetX + offsetX.current, evt.evt.offsetY + offsetY.current]);
-  };
-
-  const handleDragEvent22 = (evt: Konva.KonvaEventObject<DragEvent>) => {
-    setPoint22([evt.evt.offsetX + offsetX.current, evt.evt.offsetY + offsetY.current]);
+  const handleDragEvent22 = () => {
+    setPoint22([toNumber(circle4Ref.current?.x()), toNumber(circle4Ref.current?.y())]);
   };
 
   const handleMouseOver = () => {
@@ -56,32 +40,31 @@ const HumanEditor = ({ width, height }: HumanEditorProps) => {
 
   const handleMouseOut = () => {
     document.body.style.cursor = "default";
+    circle1Ref.current?.x();
   };
 
   return (
     <Stage width={width} height={height}>
       <Layer>
-        {/* <LionImage draggable /> */}
-
         <Circle
+          ref={circle1Ref}
           draggable
           x={point11[0]}
           y={point11[1]}
-          radius={10}
+          radius={6}
           stroke="black"
-          onDragStart={handleDragStart11}
           onDragMove={handleDragEvent11}
           onDragEnd={handleDragEvent11}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         />
         <Circle
+          ref={circle2Ref}
           draggable
           x={point21[0]}
           y={point21[1]}
-          radius={10}
+          radius={6}
           stroke="black"
-          onDragStart={handleDragStart21}
           onDragMove={handleDragEvent21}
           onDragEnd={handleDragEvent21}
           onMouseOver={handleMouseOver}
@@ -90,24 +73,24 @@ const HumanEditor = ({ width, height }: HumanEditorProps) => {
         <Line points={[...point11, ...point21]} stroke="red" strokeWidth={4} lineCap="round" lineJoin="round" />
 
         <Circle
+          ref={circle3Ref}
           draggable
           x={point12[0]}
           y={point12[1]}
-          radius={10}
+          radius={6}
           stroke="black"
-          onDragStart={handleDragStart12}
           onDragMove={handleDragEvent12}
           onDragEnd={handleDragEvent12}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         />
         <Circle
+          ref={circle4Ref}
           draggable
           x={point22[0]}
           y={point22[1]}
-          radius={10}
+          radius={6}
           stroke="black"
-          onDragStart={handleDragStart22}
           onDragMove={handleDragEvent22}
           onDragEnd={handleDragEvent22}
           onMouseOver={handleMouseOver}
