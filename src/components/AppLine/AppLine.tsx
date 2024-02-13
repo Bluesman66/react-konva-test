@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Konva from "konva";
-import { Circle, Line } from "react-konva";
+import { Circle, Line, Text } from "react-konva";
 
 import { toNumber } from "../../utils/toNumber";
 import { AppLineProps } from "./AppLine.props";
@@ -22,16 +22,25 @@ const AppLine = ({
   // refs
   const pointBeginRef = useRef<Konva.Circle>(null);
   const pointEndRef = useRef<Konva.Circle>(null);
+  const tooltipRef = useRef<Konva.Text>(null);
 
   // handlers
   const handleDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
-    onDragMove?.(e);
+    const { x, y } = e.target.attrs;
+    if (tooltipRef.current) {
+      tooltipRef.current.position({ x: x + 20, y: y + 20 });
+      tooltipRef.current.text("Red Circle");
+      tooltipRef.current.show();
+    }
+
     setLine([
       toNumber(pointBeginRef.current?.x()),
       toNumber(pointBeginRef.current?.y()),
       toNumber(pointEndRef.current?.x()),
       toNumber(pointEndRef.current?.y()),
     ]);
+
+    onDragMove?.(e);
   };
 
   const handleMouseOver = () => {
@@ -40,6 +49,14 @@ const AppLine = ({
 
   const handleMouseOut = () => {
     document.body.style.cursor = "default";
+  };
+
+  const handleDragDrop = (e: Konva.KonvaEventObject<DragEvent>) => {
+    if (tooltipRef.current) {
+      tooltipRef.current.hide();
+    }
+
+    onDragDrop?.(e);
   };
 
   if (line.length !== 4) {
@@ -56,7 +73,7 @@ const AppLine = ({
         radius={pointRadius}
         stroke={pointColor}
         onDragStart={onDragBegin}
-        onDragEnd={onDragDrop}
+        onDragEnd={handleDragDrop}
         onDragMove={handleDragMove}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
@@ -69,12 +86,13 @@ const AppLine = ({
         radius={pointRadius}
         stroke={pointColor}
         onDragStart={onDragBegin}
-        onDragEnd={onDragDrop}
+        onDragEnd={handleDragDrop}
         onDragMove={handleDragMove}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       />
       <Line points={[...line]} stroke={lineColor} strokeWidth={lineWidth} lineCap="round" lineJoin="round" />
+      <Text ref={tooltipRef} fontSize={15} visible={false} />
     </div>
   );
 };
