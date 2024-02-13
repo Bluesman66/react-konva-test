@@ -6,11 +6,8 @@ import { HumanEditorProps } from "./HumanEditor.props";
 import { toNumber } from "../../utils/toNumber";
 
 const HumanEditor = ({ width, height }: HumanEditorProps) => {
-  const [point11, setPoint11] = useState<number[]>([100, 100]);
-  const [point21, setPoint21] = useState<number[]>([200, 100]);
-
-  const [point12, setPoint12] = useState<number[]>([100, 200]);
-  const [point22, setPoint22] = useState<number[]>([200, 200]);
+  const [line1, setLine1] = useState<number[]>([100, 100, 200, 100]);
+  const [line2, setLine2] = useState<number[]>([100, 200, 200, 200]);
 
   const circle1Ref = useRef<Konva.Circle>(null);
   const circle2Ref = useRef<Konva.Circle>(null);
@@ -18,20 +15,22 @@ const HumanEditor = ({ width, height }: HumanEditorProps) => {
   const circle3Ref = useRef<Konva.Circle>(null);
   const circle4Ref = useRef<Konva.Circle>(null);
 
-  const handleDragEvent11 = () => {
-    setPoint11([toNumber(circle1Ref.current?.x()), toNumber(circle1Ref.current?.y())]);
+  const handleDragEvent1 = () => {
+    setLine1([
+      toNumber(circle1Ref.current?.x()),
+      toNumber(circle1Ref.current?.y()),
+      toNumber(circle2Ref.current?.x()),
+      toNumber(circle2Ref.current?.y()),
+    ]);
   };
 
-  const handleDragEvent21 = () => {
-    setPoint21([toNumber(circle2Ref.current?.x()), toNumber(circle2Ref.current?.y())]);
-  };
-
-  const handleDragEvent12 = () => {
-    setPoint12([toNumber(circle3Ref.current?.x()), toNumber(circle3Ref.current?.y())]);
-  };
-
-  const handleDragEvent22 = () => {
-    setPoint22([toNumber(circle4Ref.current?.x()), toNumber(circle4Ref.current?.y())]);
+  const handleDragEvent2 = () => {
+    setLine2([
+      toNumber(circle3Ref.current?.x()),
+      toNumber(circle3Ref.current?.y()),
+      toNumber(circle4Ref.current?.x()),
+      toNumber(circle4Ref.current?.y()),
+    ]);
   };
 
   const handleMouseOver = () => {
@@ -49,54 +48,54 @@ const HumanEditor = ({ width, height }: HumanEditorProps) => {
         <Circle
           ref={circle1Ref}
           draggable
-          x={point11[0]}
-          y={point11[1]}
-          radius={6}
+          x={line1[0]}
+          y={line1[1]}
+          radius={7}
           stroke="black"
-          onDragMove={handleDragEvent11}
-          onDragEnd={handleDragEvent11}
+          onDragMove={handleDragEvent1}
+          onDragEnd={handleDragEvent1}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         />
         <Circle
           ref={circle2Ref}
           draggable
-          x={point21[0]}
-          y={point21[1]}
-          radius={6}
+          x={line1[2]}
+          y={line1[3]}
+          radius={7}
           stroke="black"
-          onDragMove={handleDragEvent21}
-          onDragEnd={handleDragEvent21}
+          onDragMove={handleDragEvent1}
+          onDragEnd={handleDragEvent1}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         />
-        <Line points={[...point11, ...point21]} stroke="red" strokeWidth={4} lineCap="round" lineJoin="round" />
+        <Line points={[...line1]} stroke="red" strokeWidth={4} lineCap="round" lineJoin="round" />
 
         <Circle
           ref={circle3Ref}
           draggable
-          x={point12[0]}
-          y={point12[1]}
-          radius={6}
+          x={line2[0]}
+          y={line2[1]}
+          radius={7}
           stroke="black"
-          onDragMove={handleDragEvent12}
-          onDragEnd={handleDragEvent12}
+          onDragMove={handleDragEvent2}
+          onDragEnd={handleDragEvent2}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         />
         <Circle
           ref={circle4Ref}
           draggable
-          x={point22[0]}
-          y={point22[1]}
-          radius={6}
+          x={line2[2]}
+          y={line2[3]}
+          radius={7}
           stroke="black"
-          onDragMove={handleDragEvent22}
-          onDragEnd={handleDragEvent22}
+          onDragMove={handleDragEvent2}
+          onDragEnd={handleDragEvent2}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         />
-        <Line points={[...point12, ...point22]} stroke="red" strokeWidth={4} lineCap="round" lineJoin="round" />
+        <Line points={[...line2]} stroke="red" strokeWidth={4} lineCap="round" lineJoin="round" />
       </Layer>
     </Stage>
   );
