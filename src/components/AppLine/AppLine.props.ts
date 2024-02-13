@@ -1,3 +1,5 @@
+import Konva from "konva";
+
 import { BaseProps } from "../../models/Base.props";
 
 export interface AppLineProps extends BaseProps {
@@ -6,4 +8,7 @@ export interface AppLineProps extends BaseProps {
   pointColor?: string;
   lineColor?: string;
   lineWidth?: number;
+  onDragBegin?: (e: Konva.KonvaEventObject<DragEvent>) => void;
+  onDragDrop?: (e: Konva.KonvaEventObject<DragEvent>) => void;
+  onDragMove?: (e: Konva.KonvaEventObject<DragEvent>) => void;
 }

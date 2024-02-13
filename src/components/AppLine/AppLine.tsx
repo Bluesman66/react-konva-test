@@ -11,6 +11,9 @@ const AppLine = ({
   pointColor = "black",
   lineColor = "red",
   lineWidth = 4,
+  onDragBegin,
+  onDragMove,
+  onDragDrop,
   ...props
 }: AppLineProps) => {
   // state
@@ -21,7 +24,8 @@ const AppLine = ({
   const pointEndRef = useRef<Konva.Circle>(null);
 
   // handlers
-  const handleDragEvent = () => {
+  const handleDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
+    onDragMove?.(e);
     setLine([
       toNumber(pointBeginRef.current?.x()),
       toNumber(pointBeginRef.current?.y()),
@@ -51,8 +55,9 @@ const AppLine = ({
         y={line[1]}
         radius={pointRadius}
         stroke={pointColor}
-        onDragMove={handleDragEvent}
-        onDragEnd={handleDragEvent}
+        onDragStart={onDragBegin}
+        onDragEnd={onDragDrop}
+        onDragMove={handleDragMove}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       />
@@ -63,8 +68,9 @@ const AppLine = ({
         y={line[3]}
         radius={pointRadius}
         stroke={pointColor}
-        onDragMove={handleDragEvent}
-        onDragEnd={handleDragEvent}
+        onDragStart={onDragBegin}
+        onDragEnd={onDragDrop}
+        onDragMove={handleDragMove}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       />
